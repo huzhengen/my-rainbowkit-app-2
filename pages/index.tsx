@@ -2,6 +2,11 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
+import Test from '../components/test'
+import NftList from '../components/nftList';
+import MintNFT from '../components/mintNFT'
+import MyNFTs from '../components/myNFTs';
+import UploadNFT from '../components/uploadNFT';
 
 const Home: NextPage = () => {
   return (
@@ -17,6 +22,16 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <ConnectButton />
+        <hr style={{ width: '100%' }} />
+        <MyNFTs />
+        <hr style={{ width: '100%' }} />
+        <MintNFT />
+        <hr style={{ width: '100%' }} />
+        {/* <UploadNFT /> */}
+        {/* <hr style={{ width: '100%' }} /> */}
+        <NftList />
+        <hr style={{ width: '100%' }} />
+        {/* <Test /> */}
 
         <h1 className={styles.title}>
           Welcome to <a href="">RainbowKit</a> + <a href="">wagmi</a> +{' '}

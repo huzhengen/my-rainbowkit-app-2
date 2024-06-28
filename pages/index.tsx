@@ -7,8 +7,23 @@ import NftList from '../components/nftList';
 import MintNFT from '../components/mintNFT'
 import MyNFTs from '../components/myNFTs';
 import UploadNFT from '../components/uploadNFT';
+import { useReadContract } from 'wagmi';
+import { allenNFTExchangeAbi } from '../abis/allenNFTExchangeAbi';
+import { contractAddress } from '../utils/address';
+import { Address } from 'viem';
 
 const Home: NextPage = () => {
+
+  // 获取市场的所有 NFT
+  const { data: marketNFTs } = useReadContract({
+    abi: allenNFTExchangeAbi,
+    address: contractAddress.marketAddress as Address,
+    functionName: 'getAllNFTs',
+    args: [],
+  })
+
+  if (!marketNFTs) { return }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -29,7 +44,7 @@ const Home: NextPage = () => {
         <hr style={{ width: '100%' }} />
         {/* <UploadNFT /> */}
         {/* <hr style={{ width: '100%' }} /> */}
-        <NftList />
+        <NftList test={"123"} marketNFTs={marketNFTs} />
         <hr style={{ width: '100%' }} />
         {/* <Test /> */}
 

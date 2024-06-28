@@ -68,8 +68,6 @@ const MyNFTs: NextPage = () => {
     }
   }
 
-  console.log('mynft', myNFTs)
-
   return (
     <div>
       <h3>我拥有的 NFT</h3>

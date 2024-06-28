@@ -11,31 +11,36 @@ import { useState } from 'react';
 import { contractAddress } from '../utils/address'
 import { log } from 'console';
 import { allenNFTTokenAbi } from '../abis/allenNFTTokenAbi';
+import { marketNFT } from '../type';
 
-const NftList: NextPage = () => {
+type IProps = {
+  test: string
+  marketNFTs: readonly marketNFT[]
+}
+
+const NftList: NextPage<IProps> = (props) => {
+  const { marketNFTs } = props
   const { address } = useAccount()
-  console.log('address', address);
-
 
   const { writeContract } = useWriteContract()
 
-  const result = useReadContract({
-    abi: allenNFTExchangeAbi,
-    address: contractAddress.marketAddress as Address,
-    functionName: 'getAllNFTs',
-    args: [],
-  })
-  console.log('MARKET', result, result.data);
+  // // 获取市场的所有 NFT
+  // const result = useReadContract({
+  //   abi: allenNFTExchangeAbi,
+  //   address: contractAddress.marketAddress as Address,
+  //   functionName: 'getAllNFTs',
+  //   args: [],
+  // })
 
-  const nft = useReadContract({
-    abi: allenNFTTokenAbi,
-    address: contractAddress.nftAddress as Address,
-    functionName: 'getAllNFTs',
-    args: [address!]
-  })
-  console.log('nft', nft, nft.data)
+  // const nft = useReadContract({
+  //   abi: allenNFTTokenAbi,
+  //   address: contractAddress.nftAddress as Address,
+  //   functionName: 'getAllNFTs',
+  //   args: [address!]
+  // })
 
 
+  // 购买 NFT
   const buyNFT = (nftAddress: Address, tokenId: bigint) => {
     const result = writeContract({
       abi: allenNFTExchangeAbi,
@@ -45,16 +50,30 @@ const NftList: NextPage = () => {
     })
   }
 
+  // 下架 NFT
+  const unlist = (nftAddress: Address, tokenId: bigint, price: bigint) => {
+    const result = writeContract({
+      abi: allenNFTExchangeAbi,
+      address: contractAddress.marketAddress as Address,
+      functionName: 'unlistNFT',
+      args: [nftAddress, tokenId, price],
+    })
+  }
+
   return (
     <div>
-      <h3>NFT 列表</h3>
-      {result.data?.map(item => (
+      <h3>市场中所有的 NFT</h3>
+      {/* {result?.data?.map(item => ( */}
+      {marketNFTs?.map(item => (
         <div key={item.tokenId}>
           <h5>token id：{Number(item.tokenId)}</h5>
           <span>NFT 合约地址：{item.nftContract}</span><br></br>
           <span>卖家地址：{item.seller}</span><br></br>
           <span>价格：{Number(item.price)}</span><br></br>
-          <button onClick={() => buyNFT(item.nftContract, item.tokenId)}>购买</button>
+          {item.seller !== address &&
+            <button onClick={() => buyNFT(item.nftContract, item.tokenId)}>购买</button>}
+          {item.seller === address &&
+            <button onClick={() => unlist(item.nftContract, item.tokenId, item.price)}>下架</button>}
         </div>
       ))}
     </div>

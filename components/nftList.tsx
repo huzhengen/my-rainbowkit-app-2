@@ -23,30 +23,16 @@ const NftList: NextPage<IProps> = (props) => {
 
   const { writeContract } = useWriteContract()
 
-  // // 获取市场的所有 NFT
-  // const result = useReadContract({
-  //   abi: allenNFTExchangeAbi,
-  //   address: contractAddress.marketAddress as Address,
-  //   functionName: 'getAllNFTs',
-  //   args: [],
-  // })
-
-  // const nft = useReadContract({
-  //   abi: allenNFTTokenAbi,
-  //   address: contractAddress.nftAddress as Address,
-  //   functionName: 'getAllNFTs',
-  //   args: [address!]
-  // })
-
-
   // 购买 NFT
   const buyNFT = (nftAddress: Address, tokenId: bigint) => {
+    console.log('buy nft', nftAddress, tokenId)
     const result = writeContract({
       abi: allenNFTExchangeAbi,
       address: contractAddress.marketAddress as Address,
       functionName: 'buyNFT',
       args: [nftAddress, tokenId],
     })
+    console.log('buy nft end')
   }
 
   // 下架 NFT
@@ -70,7 +56,8 @@ const NftList: NextPage<IProps> = (props) => {
           <span>卖家地址：{item.seller}</span><br></br>
           <span>价格：{Number(item.price)}</span><br></br>
           {item.seller !== address &&
-            <button onClick={() => buyNFT(item.nftContract, item.tokenId)}>购买</button>}
+            <button onClick={() => buyNFT(item.nftContract, item.tokenId)}>购买</button>
+          }
           {item.seller === address &&
             <button onClick={() => unlist(item.nftContract, item.tokenId, item.price)}>下架</button>}
         </div>

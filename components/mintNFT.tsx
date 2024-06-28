@@ -13,17 +13,22 @@ import { allenNFTTokenAbi } from '../abis/allenNFTTokenAbi';
 
 const MintNFT: NextPage = () => {
   const { address } = useAccount()
+  const [tokenAmount, setTokenAmount] = useState('')
 
   const { writeContract } = useWriteContract()
 
   // 铸造 NFT
   const handleMintNFT = () => {
+    console.log('mint', address,contractAddress.nftAddress);
+    
     const result = writeContract({
       address: contractAddress.nftAddress as Address,
       abi: allenNFTTokenAbi,
       functionName: 'mint',
       args: [address as Address],
     })
+
+    console.log('mint end', result)
   }
 
   // 给 NFT 市场授权
@@ -36,12 +41,28 @@ const MintNFT: NextPage = () => {
     })
   }
 
+  // 给市场授权代币的数量
+  const approve = () => {
+    console.log('approve', tokenAmount, BigInt(Number(tokenAmount) * 10 ** 6))
+    const result = writeContract({
+      address: contractAddress.tokenAddress as Address,
+      abi: allenTokenAbi,
+      functionName: 'approve',
+      args: [contractAddress.marketAddress as Address, BigInt(Number(tokenAmount) * 10 ** 6)],
+    })
+    console.log('approve end', result)
+  }
+
   return (
     <div>
       <h3>铸造一个 NFT</h3>
       <button onClick={handleMintNFT}>铸造一个 NFT</button>
-      <h3>给 NFT 市场授权</h3>
-      <button onClick={approvalForAll}>给 NFT 市场授权</button>
+      <h3>给市场授权出售 NFT 权限</h3>
+      <button onClick={approvalForAll}>给市场授权售卖 NFT 权限</button>
+      <h3>给市场授权使用代币的数量</h3>
+      代币数量: <input type="text" value={tokenAmount}
+        onChange={e => setTokenAmount(e.target.value)} /><br></br>
+      <button onClick={approve}>给市场授权使用代币的数量</button>
     </div>
   );
 };

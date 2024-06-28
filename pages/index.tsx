@@ -22,7 +22,11 @@ const Home: NextPage = () => {
     args: [],
   })
 
+  
+
   if (!marketNFTs) { return }
+
+  console.log('marketNFTs', marketNFTs)
 
   return (
     <div className={styles.container}>
@@ -36,6 +40,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        <p>test  test</p>
         <ConnectButton />
         <hr style={{ width: '100%' }} />
         <MyNFTs marketNFTs={marketNFTs} />

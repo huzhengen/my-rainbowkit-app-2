@@ -11,15 +11,20 @@ import { useEffect, useState } from 'react';
 import { contractAddress } from '../utils/address'
 import { log } from 'console';
 import { allenNFTTokenAbi } from '../abis/allenNFTTokenAbi';
+import { marketNFT } from '../type';
 
 type IState = {
   tokenId: bigint
   price: number
 }
 
-const MyNFTs: NextPage = () => {
+type IProps = {
+  marketNFTs: readonly marketNFT[]
+}
+
+const MyNFTs: NextPage<IProps> = (props) => {
+  const { marketNFTs } = props
   const { address } = useAccount()
-  console.log('address', address);
   const [myNFTs, setMyNFTs] = useState<IState[]>()
 
   const nfts = useReadContract({
@@ -40,7 +45,9 @@ const MyNFTs: NextPage = () => {
     setMyNFTs(data)
   }, [nfts.data?.length])
 
-
+  const isNFTActive = (tokenId: bigint) => {
+    return marketNFTs.find(item => item.tokenId === tokenId)?.isActive
+  }
 
 
   const { writeContract } = useWriteContract()
@@ -74,9 +81,12 @@ const MyNFTs: NextPage = () => {
       {myNFTs?.map((item, index) => (
         <div key={item.tokenId}>
           <h5>token id：{Number(item.tokenId)}</h5>
-          价格: <input type="text" value={item.price}
-            onChange={e => changePrice(e.target.value, index)} /><br></br>
-          <button onClick={() => handleUploadNFT(index)}>上架 NFT</button>
+          {!isNFTActive(item.tokenId) &&
+            <p>上架价格: <input type="text" value={item.price}
+              onChange={e => changePrice(e.target.value, index)} /><br></br></p>}
+          {isNFTActive(item.tokenId)
+            ? '已上架'
+            : <button onClick={() => handleUploadNFT(index)}>上架 NFT</button>}
         </div>
       ))}
     </div>

@@ -14,7 +14,6 @@ import { allenNFTTokenAbi } from '../abis/allenNFTTokenAbi';
 import { marketNFT } from '../type';
 
 type IProps = {
-  test: string
   marketNFTs: readonly marketNFT[]
 }
 

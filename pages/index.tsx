@@ -15,14 +15,15 @@ import { Address } from 'viem';
 const Home: NextPage = () => {
 
   // 获取市场的所有 NFT
-  const { data: marketNFTs } = useReadContract({
+  const { data: marketNFTs, failureReason, } = useReadContract({
     abi: allenNFTExchangeAbi,
     address: contractAddress.marketAddress as Address,
     functionName: 'getAllNFTs',
     args: [],
   })
 
-  
+  console.log('marketNFTs', marketNFTs, failureReason)
+
 
   if (!marketNFTs) { return }
 
@@ -40,7 +41,6 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <p>test  test</p>
         <ConnectButton />
         <hr style={{ width: '100%' }} />
         <MyNFTs marketNFTs={marketNFTs} />
@@ -53,12 +53,6 @@ const Home: NextPage = () => {
         <hr style={{ width: '100%' }} />
         {/* <Test /> */}
       </main>
-
-      <footer className={styles.footer}>
-        <a href="https://rainbow.me" rel="noopener noreferrer" target="_blank">
-          Made with ❤️ by your frens at 🌈
-        </a>
-      </footer>
     </div>
   );
 };

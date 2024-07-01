@@ -12,6 +12,7 @@ import {
   polygon,
   sepolia,
   localhost,
+  hardhat,
 } from 'wagmi/chains';
 import { getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 
@@ -24,10 +25,12 @@ const config = getDefaultConfig({
     optimism,
     arbitrum,
     base,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [sepolia, localhost] : []),
+    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [sepolia, localhost, hardhat] : []),
   ],
   ssr: true,
 });
+
+console.log('env', process.env.NEXT_PUBLIC_ENABLE_TESTNETS);
 
 const client = new QueryClient();
 

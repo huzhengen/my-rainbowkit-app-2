@@ -3,12 +3,17 @@ export const allenNFTExchangeAbi = [
     "inputs": [
       {
         "internalType": "address",
-        "name": "_paymentToken",
+        "name": "coinAddr_",
         "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "ReentrancyGuardReentrantCall",
+    "type": "error"
   },
   {
     "anonymous": false,
@@ -38,7 +43,7 @@ export const allenNFTExchangeAbi = [
         "type": "uint256"
       }
     ],
-    "name": "NFTListed",
+    "name": "NftListed",
     "type": "event"
   },
   {
@@ -69,30 +74,61 @@ export const allenNFTExchangeAbi = [
         "type": "uint256"
       }
     ],
-    "name": "NFTPurchased",
+    "name": "NftSold",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "nftContract",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "unlistedAt",
+        "type": "uint256"
+      }
+    ],
+    "name": "NftUnlisted",
     "type": "event"
   },
   {
     "inputs": [
       {
         "internalType": "address",
-        "name": "_nftContract",
+        "name": "nftContract",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "_tokenId",
+        "name": "tokenId",
         "type": "uint256"
       }
     ],
-    "name": "buyNFT",
+    "name": "buy",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "getAllNFTs",
+    "name": "getAll",
     "outputs": [
       {
         "components": [
@@ -112,17 +148,27 @@ export const allenNFTExchangeAbi = [
             "type": "uint256"
           },
           {
+            "internalType": "string",
+            "name": "tokenUrl",
+            "type": "string"
+          },
+          {
             "internalType": "uint256",
             "name": "price",
             "type": "uint256"
           },
           {
+            "internalType": "uint256",
+            "name": "listedAt",
+            "type": "uint256"
+          },
+          {
             "internalType": "bool",
-            "name": "isActive",
+            "name": "listing",
             "type": "bool"
           }
         ],
-        "internalType": "struct AllenNFTExchange.Listing[]",
+        "internalType": "struct RaiGallery.NftItem[]",
         "name": "",
         "type": "tuple[]"
       }
@@ -134,21 +180,50 @@ export const allenNFTExchangeAbi = [
     "inputs": [
       {
         "internalType": "address",
-        "name": "_nftContract",
+        "name": "nftContract",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "_tokenId",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "isListing",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "nftContract",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_price",
+        "name": "price",
         "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "tokenUrl",
+        "type": "string"
       }
     ],
-    "name": "listNFT",
+    "name": "sell",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -157,24 +232,6 @@ export const allenNFTExchangeAbi = [
     "inputs": [
       {
         "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "listings",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "seller",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "nftContract",
         "type": "address"
       },
@@ -182,94 +239,11 @@ export const allenNFTExchangeAbi = [
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "isActive",
-        "type": "bool"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "nfts",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "seller",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "nftContract",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "isActive",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "paymentToken",
-    "outputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_nftContract",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_price",
-        "type": "uint256"
-      }
-    ],
-    "name": "unlistNFT",
+    "name": "unlist",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   }
-] as const  
+] as const

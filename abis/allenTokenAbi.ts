@@ -1,6 +1,12 @@
 export const allenTokenAbi = [
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "initialValue",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -312,4 +318,4 @@ export const allenTokenAbi = [
     "stateMutability": "nonpayable",
     "type": "function"
   }
-] as const 
+] as const

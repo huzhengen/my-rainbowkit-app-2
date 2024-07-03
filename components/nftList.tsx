@@ -20,6 +20,7 @@ type IProps = {
 const NftList: NextPage<IProps> = (props) => {
   const { marketNFTs } = props
   const { address } = useAccount()
+  const defaultTokenUrl = 'https://i.seadn.io/gcs/files/66be20e095f676510f26574a15a348d5.png?auto=format&dpr=1&w=750'
 
   const { writeContract } = useWriteContract()
 
@@ -29,7 +30,7 @@ const NftList: NextPage<IProps> = (props) => {
     const result = writeContract({
       abi: allenNFTExchangeAbi,
       address: contractAddress.marketAddress as Address,
-      functionName: 'buyNFT',
+      functionName: 'buy',
       args: [nftAddress, tokenId],
     })
     console.log('buy nft end')
@@ -37,24 +38,28 @@ const NftList: NextPage<IProps> = (props) => {
 
   // 下架 NFT
   const unlist = (nftAddress: Address, tokenId: bigint, price: bigint) => {
+    console.log('unlist', nftAddress, tokenId, price)
     const result = writeContract({
       abi: allenNFTExchangeAbi,
       address: contractAddress.marketAddress as Address,
-      functionName: 'unlistNFT',
-      args: [nftAddress, tokenId, price],
+      functionName: 'unlist',
+      args: [nftAddress, tokenId],
     })
+    console.log('unlist end', result)
   }
 
   return (
     <div>
-      <h3>市场中所有的 NFT</h3>
+      <h3>市场中正在售卖的 NFT</h3>
       {/* {result?.data?.map(item => ( */}
       {marketNFTs?.map(item => (
         <div key={item.tokenId}>
+          <img width={50} src={item.tokenUrl || defaultTokenUrl} alt="" />
           <h5>token id：{Number(item.tokenId)}</h5>
           <span>NFT 合约地址：{item.nftContract}</span><br></br>
           <span>卖家地址：{item.seller}</span><br></br>
           <span>价格：{Number(item.price)}</span><br></br>
+          <span>时间：{String(new Date(Number(item.listedAt)))}</span><br></br>
           {item.seller !== address &&
             <button onClick={() => buyNFT(item.nftContract, item.tokenId)}>购买</button>
           }

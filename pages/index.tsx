@@ -11,6 +11,7 @@ import { useReadContract } from 'wagmi';
 import { allenNFTExchangeAbi } from '../abis/allenNFTExchangeAbi';
 import { contractAddress } from '../utils/address';
 import { Address } from 'viem';
+import { marketNFT } from '../type';
 
 const Home: NextPage = () => {
 
@@ -18,7 +19,7 @@ const Home: NextPage = () => {
   const { data: marketNFTs, failureReason, } = useReadContract({
     abi: allenNFTExchangeAbi,
     address: contractAddress.marketAddress as Address,
-    functionName: 'getAllNFTs',
+    functionName: 'getAll',
     args: [],
   })
 
@@ -28,6 +29,10 @@ const Home: NextPage = () => {
   if (!marketNFTs) { return }
 
   console.log('marketNFTs', marketNFTs)
+
+  const marketNFTsSelling = marketNFTs.filter(item => item.listing)
+
+  console.log('marketNFTsSelling', marketNFTsSelling)
 
   return (
     <div className={styles.container}>
@@ -47,9 +52,9 @@ const Home: NextPage = () => {
         <hr style={{ width: '100%' }} />
         <MintNFT />
         <hr style={{ width: '100%' }} />
-        {/* <UploadNFT /> */}
-        {/* <hr style={{ width: '100%' }} /> */}
-        <NftList marketNFTs={marketNFTs} />
+        <UploadNFT />
+        <hr style={{ width: '100%' }} />
+        <NftList marketNFTs={marketNFTsSelling} />
         <hr style={{ width: '100%' }} />
         {/* <Test /> */}
       </main>

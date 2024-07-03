@@ -1,9 +1,19 @@
 import { Address } from 'viem';
 
 export interface marketNFT {
-  tokenId: bigint
-  nftContract: Address
   seller: Address
+  nftContract: Address
+  tokenId: bigint
+  tokenUrl: string
   price: bigint
-  isActive: boolean
+  listedAt: bigint
+  listing: boolean
 }
+
+// address seller;
+// address nftContract;
+// uint tokenId;
+// string tokenUrl;
+// uint256 price;
+// uint256 listedAt;
+// bool listing;

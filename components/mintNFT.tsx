@@ -19,13 +19,13 @@ const MintNFT: NextPage = () => {
 
   // 铸造 NFT
   const handleMintNFT = () => {
-    console.log('mint', address,contractAddress.nftAddress);
-    
+    console.log('mint', address, contractAddress.nftAddress);
+
     const result = writeContract({
       address: contractAddress.nftAddress as Address,
       abi: allenNFTTokenAbi,
       functionName: 'mint',
-      args: [address as Address],
+      args: [],
     })
 
     console.log('mint end', result)
@@ -43,7 +43,7 @@ const MintNFT: NextPage = () => {
 
   // 给市场授权代币的数量
   const approve = () => {
-    console.log('approve', tokenAmount, BigInt(Number(tokenAmount) * 10 ** 6))
+    console.log('approve', tokenAmount, BigInt(Number(tokenAmount) * 10 ** 2))
     const result = writeContract({
       address: contractAddress.tokenAddress as Address,
       abi: allenTokenAbi,
@@ -54,15 +54,21 @@ const MintNFT: NextPage = () => {
   }
 
   return (
-    <div>
-      <h3>铸造一个 NFT</h3>
-      <button onClick={handleMintNFT}>铸造一个 NFT</button>
-      <h3>给市场授权出售 NFT 权限</h3>
-      <button onClick={approvalForAll}>给市场授权售卖 NFT 权限</button>
-      <h3>给市场授权使用代币的数量</h3>
-      代币数量: <input type="text" value={tokenAmount}
-        onChange={e => setTokenAmount(e.target.value)} /><br></br>
-      <button onClick={approve}>给市场授权使用代币的数量</button>
+    <div style={{ display: 'flex', gap: '0 10px' }}>
+      <div style={{border:'1px solid #ccc',padding:5,}}>
+        <h3>铸造一个 NFT</h3>
+        <button onClick={handleMintNFT}>铸造一个 NFT</button>
+      </div>
+      <div style={{border:'1px solid #ccc',padding:5,}}>
+        <h3>给市场授权出售 NFT 权限</h3>
+        <button onClick={approvalForAll}>给市场授权售卖 NFT 权限</button>
+      </div>
+      <div style={{border:'1px solid #ccc',padding:5,}}>
+        <h3>给市场授权使用代币的数量</h3>
+        代币数量: <input type="text" value={tokenAmount}
+          onChange={e => setTokenAmount(e.target.value)} /><br></br>
+        <button onClick={approve}>给市场授权使用代币的数量</button>
+      </div>
     </div>
   );
 };
